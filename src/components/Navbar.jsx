@@ -1,12 +1,17 @@
 /* eslint-disable react/no-unknown-property */
-/* eslint-disable no-unused-vars */
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext } from "../context/AppContext";
 const Navbar = () => {
   const navigate = useNavigate();
+  const { token, setToken, userData } = useContext(AppContext);
   const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
+
+  const logOut = () => {
+    setToken(false);
+    localStorage.removeItem("token");
+  };
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400">
       <svg
@@ -47,9 +52,9 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-4">
-        {token ? (
+        {token && userData ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
-            <img className="w-8 rounded-full" src={assets.profile_pic} alt="" />
+            <img className="w-8 rounded-full" src={userData.image} alt="" />
             <img className="w-2.5 " src={assets.dropdown_icon} alt="" />
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
               <div className="min-w-48 bg-stone-100 flex flex-col gap-4 p-4">
@@ -65,10 +70,7 @@ const Navbar = () => {
                 >
                   My Appointment
                 </p>
-                <p
-                  onClick={() => setToken(false)}
-                  className="hover:text-black cursor-pointer"
-                >
+                <p onClick={logOut} className="hover:text-black cursor-pointer">
                   Logout
                 </p>
               </div>
