@@ -182,13 +182,13 @@ const MyProfile = () => {
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
-                    dateOfBirth: e.target.value,
+                    dob: e.target.value,
                   }))
                 }
-                value={userData.dateOfBirth}
+                value={userData.dob}
               />
             ) : (
-              <p className="display-text">{userData.dateOfBirth}</p>
+              <p className="display-text">{userData.dob}</p>
             )}
           </div>
         </div>

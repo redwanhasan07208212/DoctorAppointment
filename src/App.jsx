@@ -11,6 +11,8 @@ import Footer from "./components/Footer";
 import MyAppointments from "./pages/MyAppointments";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailed from "./pages/PaymentFailed";
 function App() {
   return (
     <div className="mx-4 sm:mx-[10%]">
@@ -26,6 +28,8 @@ function App() {
         <Route path="/my-profile" element={<MyProfile />} />
         <Route path="/my-appointments" element={<MyAppointments />} />
         <Route path="/appointment/:docId" element={<Appointment />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-failed" element={<PaymentFailed />} />
       </Routes>
       <Footer />
     </div>

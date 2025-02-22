@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const MyAppointments = () => {
-  const { backendUrl, token } = useContext(AppContext);
+  const { backendUrl, token, getDoctorsData } = useContext(AppContext);
 
   const [appointments, setAppointments] = useState([]);
   const months = [
@@ -46,19 +46,69 @@ const MyAppointments = () => {
       toast.error(err.message);
     }
   };
+  const cancelAppointment = async (appointmentId) => {
+    try {
+      console.log("Cancelling appointment:", appointmentId); // Debugging
+      const { data } = await axios.post(
+        backendUrl + "/api/user/cancel-appointment", // Concatenate backendUrl and endpoint
+        { appointmentId }, // Request body
+        {
+          headers: { Authorization: `Bearer ${token}` }, // Authorization header
+        }
+      );
+
+      console.log("Backend Response:", data); // Debugging
+
+      if (data.success) {
+        toast.success(data.message);
+        getUserAppointments(); // Refresh the appointments list
+        getDoctorsData();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    }
+  };
+
+  const payForAppointment = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/user/payment/initiate",
+        { appointmentId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (data.success) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Failed to initiate payment");
+    }
+  };
 
   useEffect(() => {
     if (token) {
       getUserAppointments();
     }
-  }, [token]);
+    // Check for payment redirect
+    if (window.location.search.includes("from-payment=true")) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [token, window.location.search]);
   return (
     <div>
       <p className="pb-3 mt-12 font-medium text-zinc-700 border-b">
         My Appointments
       </p>
       <div>
-        {appointments.slice(0, 3).map((item, index) => (
+        {appointments.slice(0, 10).map((item, index) => (
           <div
             className="grid grid-cols-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b"
             key={index}
@@ -94,8 +144,30 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className="flex flex-col justify-end gap-5">
-              <button>Pay Online</button>
-              <button className="hover:bg-red-600">Cancel Appointment</button>
+              {!item.cancelled && item.payment && (
+                <button className="sm:min-w-48 py-2 border text-stone-500 bg-indigo-50">
+                  Paid
+                </button>
+              )}
+              {!item.cancelled && !item.payment && (
+                <button onClick={() => payForAppointment(item._id)}>
+                  Pay Online
+                </button>
+              )}
+
+              {!item.cancelled && (
+                <button
+                  onClick={() => cancelAppointment(item._id)}
+                  className="hover:bg-red-600"
+                >
+                  Cancel Appointment
+                </button>
+              )}
+              {item.cancelled && (
+                <button className="text-red-600 bg-slate-300">
+                  Appointment Cancelled
+                </button>
+              )}
             </div>
           </div>
         ))}
