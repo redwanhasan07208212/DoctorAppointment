@@ -66,7 +66,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Get In Touch</h3>
             <ul className="space-y-2 text-gray-600">
               <li>📞 +8801568283360</li>
-              <li>📧 faiyad@gmail.com</li>
+              <li>📧 redwanhasancse@gmail.com</li>
             </ul>
             {/* Social Media Links */}
             <div className="flex gap-4 mt-4">

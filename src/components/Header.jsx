@@ -1,6 +1,5 @@
 import { assets } from "../assets/assets";
 import "../css/Header.css";
-import frontImg from "../assets/front.jpg";
 const Header = () => {
   return (
     <div className="flex flex-col md:flex-row bg-primary rounded-lg px-6 md:px-10 lg:px-20 overflow-hidden">
@@ -34,8 +33,8 @@ const Header = () => {
       {/* Right side content */}
       <div className="md:w-1/2 relative flex items-center justify-center md:justify-end">
         <img
-          className="w-full max-w-[500px] md:max-w-none md:absolute bottom-0  rounded-lg transform md:translate-x-10 lg:translate-x-20 animate-float h-[300px]"
-          src={frontImg}
+          className="w-full md:max-w-none md:absolute bottom-0  rounded-lg transform md:translate-x-10 lg:translate-x-20 animate-float"
+          src={assets.header_img}
           alt="Doctor illustration"
         />
       </div>

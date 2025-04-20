@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#003748",
+        primary: "#5F6FFF",
       },
       gridTemplateColumns: {
         auto: "repeat(auto-fill,minmax(200px,1fr))",
